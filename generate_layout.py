@@ -17,17 +17,43 @@ def rate_difficulty(keys):
     return difficulty
 
 
+# Determine whether a given input combination can be accomplished by the given keys
+def valid_input(input, key_layout, finger_layout):
+    if input.count(NON_PRESS) == 5:
+        return False
+
+    for i in range(len(input)):
+        press = input[i]
+        if press != NON_PRESS:
+            if key_layout[i] != "1":
+                return False
+
+    ranges = [(0, 1), (0, 1, 2), (1, 2, 3), (2, 3), [4]]
+    finger_layout = [f for f in finger_layout]
+    for i in range(len(input)):
+        if input[i] != NON_PRESS:
+            valid = False
+            for f_index in ranges[i]:
+                if finger_layout[f_index] == '1':
+                    valid = True
+                    finger_layout[f_index] = '0'
+                    break
+            if not valid:
+                return False
+    return True
+
+
 # Find and print the inputs based on most-used letters and easiest inputs
-def main(input_file, num_keys, num_fingers):
+def main(input_file, key_layout, finger_layout):
     # options = ["↑", "↓", "→", "←", NON_PRESS]
     options = ["U", "D", "L", "R", NON_PRESS]
 
     all_inputs = list(itertools.product(
-        options, repeat=num_keys))  # All combinations
+        options, repeat=5))  # All combinations
 
     # Reduce to all `possible` combinations
     possible_inputs = [i for i in all_inputs
-                       if i.count(NON_PRESS) >= num_keys-num_fingers and i.count(NON_PRESS) != num_keys]
+                       if valid_input(i, key_layout, finger_layout)]
     possible_inputs.sort(key=rate_difficulty)  # sort them based on difficulty
 
     letters = get_letters(input_file)
@@ -55,6 +81,9 @@ if __name__ == "__main__":
     if len(sys.argv) != 4:  # Incorrect number of inputs, use this schema
         print("ERROR: To generate a key layout, run this script with the arguments:")
         print(
-            "python generate_layout.py <INPUT_FILE> <NUM_KEYS> <NUM_FINGERS>")
+            "python generate_layout.py <INPUT_FILE> <KEY OPTIONS> <FINGER OPTIONS>")
+        print(
+            "ex: python generate_layout.py ranked_inputs.txt 11001 01001"
+        )
         exit(1)
-    main(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]))
+    main(sys.argv[1], sys.argv[2], sys.argv[3])
