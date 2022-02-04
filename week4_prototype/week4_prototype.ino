@@ -7,7 +7,7 @@ const int D = 512;
 const int MINVAL = 250;
 const int MAXVAL = 770;
 const int THRESHOLD = 80;
-const int COOLDOWN = 50;
+const int COOLDOWN = 20;
 const int TEST_KEY = 0;
 
 
@@ -34,22 +34,42 @@ void loop()
 {
 
 
-//  Serial.println(directions);
   read_keys(); // read the joystick inputs
   get_directions(); //convert input voltages into directions
   char* letter = map_letter(directions); // map directions to a letter through the generated layout
+//  Serial.println(directions);
 
+  int prev_dash = count_dash(directions);
+  int new_dash = prev_dash;
   while(strcmp(directions, "-----") != 0) {
     read_keys(); // read the joystick inputs
     get_directions(); //convert input voltages into directions
-    
-//    letter = map_letter(directions);
-  }
+//    Serial.println(directions);
 
-  
-  if (strcmp(letter, "") != 0){
+    new_dash = count_dash(directions);
+
+    if (new_dash <= prev_dash){
+      prev_dash = new_dash;
+      letter = map_letter(directions);
+
+    }
+    delay(10);
+  }
     Serial.println(letter);
-    //Keyboard.print(letter);
+
+  //IICCRRCCRRFARRIWWWWWW
+  if (strcmp(letter, "none") != 0){
+    Serial.println(letter);
+    String str_letter = String(letter);
+    
+    if (str_letter.length() > 1){
+      int key_as_num = str_letter.toInt();
+      Keyboard.write(key_as_num);
+    }
+    else{
+      Keyboard.print(letter);
+    }
+    
   }
   delay(COOLDOWN); // if a real letter is typed, cool down before the next reading
   
@@ -80,6 +100,7 @@ void get_directions()
     else
       directions[i] = '-';
   }
+  directions[NUM_KEYS] = '\0';
 }
 
 void read_keys() // reads joysticks, currently only reads TEST_KEY
@@ -90,6 +111,9 @@ void read_keys() // reads joysticks, currently only reads TEST_KEY
 //
   xvals[2] = analogRead(A2);
   yvals[2] = analogRead(A3);
+
+  xvals[3] = analogRead(A4);
+  yvals[3] = analogRead(A5);
 
 
 //
