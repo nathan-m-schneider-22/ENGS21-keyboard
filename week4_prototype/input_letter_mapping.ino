@@ -1,6 +1,6 @@
-char *inputs[] = { "U----","D----","L----","R----","-U---","-D---","-L---","-R---","--U--","--D--","--L--","--R--","---U-","---D-","---L-","---R-","----U","----D","----L","----R","UU---","U-U--","U--U-","U---U","DD---","D-D--" };
-char *letters[] = { "E","A","R","I","O","T","N","S","L","C","U","D","P","M","H","G","B","F","Y","W","K","V","X","Z","J","Q" };
-const int NUM_LETTERS =  26 ;
+char *inputs[] = { "-U---","-D---","-L---","-R---","--U--","--D--","--L--","--R--","-UU--","-DD--","-LL--","-RR--","-UD--","-UL--","-UR--","-DU--","-DL--","-DR--","-LU--","-LD--","-LR--","-RU--","-RD--","-RL--" };
+char *letters[] = { "E","A","R","I","O","T","N","S","L","C","U","D","P","M","H","G","B","F","Y","W","K","V","X","Z" };
+const int NUM_LETTERS =  24 ;
 
 
 // above are outputs of the generate_layout.py script to generate key layouts
@@ -11,5 +11,5 @@ char *map_letter(char* input)
         return letters[i]; // return the match
       }
     }
-    return "?"; // no match
+    return ""; // no match
 }
