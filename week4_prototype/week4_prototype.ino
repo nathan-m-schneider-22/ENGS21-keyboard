@@ -7,7 +7,7 @@ const int D = 512;
 const int MINVAL = 250;
 const int MAXVAL = 770;
 const int THRESHOLD = 80;
-const int COOLDOWN = 20;
+const int COOLDOWN = 100;
 const int TEST_KEY = 0;
 
 
@@ -57,13 +57,13 @@ void loop()
   }
     Serial.println(letter);
 
-  //IICCRRCCRRFARRIWWWWWW
   if (strcmp(letter, "none") != 0){
     Serial.println(letter);
     String str_letter = String(letter);
     
     if (str_letter.length() > 1){
       int key_as_num = str_letter.toInt();
+      Serial.println(key_as_num);
       Keyboard.write(key_as_num);
     }
     else{
