@@ -55,7 +55,6 @@ def main(input_file, key_layout, finger_layout):
     possible_inputs = [i for i in all_inputs
                        if valid_input(i, key_layout, finger_layout)]
     possible_inputs.sort(key=rate_difficulty)  # sort them based on difficulty
-
     letters = get_letters(input_file)
 
     # Convert tuples to strings
@@ -71,9 +70,12 @@ def main(input_file, key_layout, finger_layout):
 
     input_strings = ['"' + inp + '"' for inp in input_strings]
     # print in Arduino Form
+    print()
     print("char *inputs[] = {", ','.join(input_strings[0:len(letters)]), "};")
-    letters = ['"' + l + '"' for l in letters]
-    print("char *letters[] = {", ','.join(letters), "};")
+    lowercase = ['"' + l.split(',')[0] + '"' for l in letters]
+    uppercase = ['"' + l.split(',')[1] + '"' for l in letters]
+    print("char *lowercase[] = {", ','.join(lowercase), "};")
+    print("char *uppercase[] = {", ','.join(uppercase), "};")
     print("const int NUM_LETTERS = ", len(letters), ";")
 
 

@@ -1,5 +1,8 @@
 // Nathan Schneider
 // Week 4 Prototype
+int fsrAnalogPin = 6; 
+int LEDpin = 11; 
+
 
 // Constants for inputs
 const int NUM_KEYS = 5;
@@ -9,6 +12,10 @@ const int MAXVAL = 770;
 const int THRESHOLD = 80;
 const int COOLDOWN = 100;
 const int TEST_KEY = 0;
+
+
+int shifting_threshold = 800;
+bool isShifting = false;
 
 
 // Initialize joystick readings to the middle range
@@ -24,6 +31,7 @@ char directions[NUM_KEYS] = "-----";
 void setup()
 {
   Serial.begin(9600);
+  pinMode(LEDpin, OUTPUT);
 
 // keyboard not working on Arduino Uno
   Keyboard.begin();
@@ -55,7 +63,6 @@ void loop()
     }
     delay(10);
   }
-    Serial.println(letter);
 
   if (strcmp(letter, "none") != 0){
     Serial.println(letter);
@@ -63,7 +70,6 @@ void loop()
     
     if (str_letter.length() > 1){
       int key_as_num = str_letter.toInt();
-      Serial.println(key_as_num);
       Keyboard.write(key_as_num);
     }
     else{
@@ -106,6 +112,7 @@ void get_directions()
 void read_keys() // reads joysticks, currently only reads TEST_KEY
 {
 
+  check_shifting();
   xvals[1] = analogRead(A0);
   yvals[1] = analogRead(A1);
 //
@@ -115,7 +122,17 @@ void read_keys() // reads joysticks, currently only reads TEST_KEY
   xvals[3] = analogRead(A4);
   yvals[3] = analogRead(A5);
 
-
 //
+}
+void check_shifting() {
+
+  int force_val = analogRead(6);
+
+  if (force_val > shifting_threshold) isShifting = true;
+  else if (strcmp(directions, "-----") == 0) isShifting = false;
   
+  if (isShifting) analogWrite(LEDpin, 255);
+  else{
+    analogWrite(LEDpin, 0);
+  }
 }
