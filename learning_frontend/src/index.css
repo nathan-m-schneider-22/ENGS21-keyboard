@@ -1,0 +1,16 @@
+img {
+  width: 25px;
+  height: 25px;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.centerText {
+  text-align: center;
+}
+
+.characterBlock {
+  border: 4px solid #eee;
+}
