@@ -9,7 +9,7 @@ const int NUM_KEYS = 5;
 const int D = 512;
 const int MINVAL = 250;
 const int MAXVAL = 770;
-const int THRESHOLD = 80;
+const int THRESHOLD =90;
 const int COOLDOWN = 100;
 const int TEST_KEY = 0;
 
@@ -61,7 +61,7 @@ void loop()
       letter = map_letter(directions);
 
     }
-    delay(10);
+    delay(50);
   }
 
   if (strcmp(letter, "none") != 0){
