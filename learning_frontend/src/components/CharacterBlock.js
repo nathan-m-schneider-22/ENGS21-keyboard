@@ -16,7 +16,7 @@ const CharacterBlock = ({ line }) => {
     
     return (
         <div className="characterBlock" key={line}>
-            <h1 className="centerText">{line.substring(line.indexOf(": ") + 2)}</h1>
+            <h1 className="centerText">{line.substring(line.indexOf(": ") + 2)[1]}</h1>
             <div className="centerText">
                 {arrows}
             </div>
