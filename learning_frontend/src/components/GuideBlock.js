@@ -8,13 +8,13 @@ const xsValue = keyLayout.length > 3 ? 1 : 2;
 
 const GuideBlock = () => {
     //create array with each element being a line from layout.js
-    let lines = keyMapping.split("\n");
+    let lines = keyMapping.trim().split("\n");
     //sort alphabetically by the character
-    lines.sort(function compareChars(a, b) {
-        if (a.substring(a.indexOf(": ") + 2) < b.substring(b.indexOf(": ") + 2)) return -1;
-        if (a.substring(a.indexOf(": ") + 2) > b.substring(b.indexOf(": ") + 2)) return 1;
-        return 0;
-    });
+    // lines.sort(function compareChars(a, b) {
+    //     if (a.substring(a.indexOf(": ") + 2) < b.substring(b.indexOf(": ") + 2)) return -1;
+    //     if (a.substring(a.indexOf(": ") + 2) > b.substring(b.indexOf(": ") + 2)) return 1;
+    //     return 0;
+    // });
 
     //grab HTML for the characterBlocks
     let characterBlocks = []

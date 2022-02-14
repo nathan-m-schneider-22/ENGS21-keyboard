@@ -6,7 +6,7 @@ function App() {
       <h1 style={{ textAlign: "center" }}>Guide to Your Custom Layout</h1>
       <GuideBlock />
       <div style={{ textAlign: "center", marginTop: "2em" }}>
-        <textarea name="paragraph_text" cols="100" rows="10"></textarea>
+        <textarea style={{ fontSize: '36px' }} name="paragraph_text" cols="50" rows="10"></textarea>
       </div>
     </div>
   );

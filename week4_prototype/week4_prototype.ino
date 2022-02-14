@@ -9,7 +9,7 @@ const int NUM_KEYS = 5;
 const int D = 512;
 const int MINVAL = 250;
 const int MAXVAL = 770;
-const int THRESHOLD = 80;
+const int THRESHOLD =90;
 const int COOLDOWN = 100;
 const int TEST_KEY = 0;
 
@@ -61,7 +61,7 @@ void loop()
       letter = map_letter(directions);
 
     }
-    delay(10);
+    delay(50);
   }
 
   if (strcmp(letter, "none") != 0){
@@ -75,9 +75,8 @@ void loop()
     else{
       Keyboard.print(letter);
     }
-    
+  delay(50); // if a real letter is typed, cool down before the next reading
   }
-  delay(COOLDOWN); // if a real letter is typed, cool down before the next reading
   
 }
 int count_dash(char* input){
@@ -113,14 +112,14 @@ void read_keys() // reads joysticks, currently only reads TEST_KEY
 {
 
   check_shifting();
-  xvals[1] = analogRead(A0);
-  yvals[1] = analogRead(A1);
+  xvals[0] = analogRead(A0);
+  yvals[0] = analogRead(A1);
 //
-  xvals[2] = analogRead(A2);
-  yvals[2] = analogRead(A3);
+  xvals[1] = analogRead(A2);
+  yvals[1] = analogRead(A3);
 
-  xvals[3] = analogRead(A4);
-  yvals[3] = analogRead(A5);
+  xvals[2] = analogRead(A4);
+  yvals[2] = analogRead(A5);
 
 //
 }
