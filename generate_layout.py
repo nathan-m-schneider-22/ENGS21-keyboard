@@ -5,6 +5,7 @@ from re import L
 NON_PRESS = "-"
 
 SPECIAL_KEY_NAMES = {'"178"': '"⌫"', '"176"': '"↩"', '" "': "⎵"}
+FRONT_END_LAYOUT_PATH = './learning_frontend/src/constants/layout.js'
 
 
 def get_letters(filename):  # Pull the desired outputs
@@ -80,7 +81,7 @@ def main(input_file, key_layout, finger_layout):
     print("char *uppercase[] = {", ','.join(uppercase), "};")
     print("const int NUM_LETTERS = ", len(letters), ";")
 
-    f = open("layout.js", "w")
+    f = open(FRONT_END_LAYOUT_PATH, "w")
     f.write("export const keyMapping = \n`")
     for i in range(len(letters)):
         tempLine =  ""
