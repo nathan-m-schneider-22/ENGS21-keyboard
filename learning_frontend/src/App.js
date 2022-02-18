@@ -6,37 +6,37 @@ export default class App extends React.Component {
     super(props)
     this.state = {
       shiftActive: false,
-      tempKey: null,
     };
+    this.onShiftActiveChange = this.onShiftActiveChange.bind(this);
+  }
+
+  onShiftActiveChange(isActive){
+    this.setState({ shiftActive: isActive });
   }
   
   render() {
     return (
       <div className="App">
         <h1 style={{ textAlign: "center" }}>Guide to Your Custom Layout</h1>
-        <GuideBlock />
+        <GuideBlock shiftActive={this.state.shiftActive}/>
         <div style={{ textAlign: "center", marginTop: "2em" }}>
           <textarea style={{ fontSize: '36px' }} name="paragraph_text" cols="50" rows="10" onKeyDown={(e) => this.handleKeyDown(e)} onKeyUp={(e) => this.handleKeyUp(e)}></textarea>
-          <p>{this.state.tempKey || "none"}</p>
         </div>
+        <p>{this.state.shiftActive + ""}</p>
       </div>
     );
   }
+
   handleKeyDown(e) {
-    if(!this.state.shiftActive && (this.e.key === "Shift" || this.e.keyCode === 16)) {
-      this.setState({ shiftActive: true });
+    if(!this.state.shiftActive && (e.key === "Shift" || e.keyCode === 16)) {
+      this.onShiftActiveChange(true);
     }
-    this.setState({ tempKey: e.key });
-    console.log(e);
   };
 
   handleKeyUp(e) {
-    if(this.state.shiftActive && (this.e.key === "Shift" || this.e.keyCode === 16)) {
-      this.setState({ shiftActive: false });
+    if(this.state.shiftActive && (e.key === "Shift" || e.keyCode === 16)) {
+      this.onShiftActiveChange(false);
     }
   };
 
 }
-
-
-//const handleKeyDown = ()

@@ -4,7 +4,7 @@ import sys
 from re import L
 NON_PRESS = "-"
 
-SPECIAL_KEY_NAMES = {'"178"': '"⌫"', '"176"': '"↩"'}
+SPECIAL_KEY_NAMES = {'"178"': '"⌫"', '"176"': '"↩"', '" "': "⎵"}
 
 
 def get_letters(filename):  # Pull the desired outputs
@@ -83,12 +83,16 @@ def main(input_file, key_layout, finger_layout):
     f = open("layout.js", "w")
     f.write("export const keyMapping = \n`")
     for i in range(len(letters)):
+        tempLine =  ""
         if lowercase[i] in SPECIAL_KEY_NAMES:
-            f.write("%s: %s\n" %
-                    (input_strings[i].replace('"', ''), SPECIAL_KEY_NAMES[lowercase[i]]))
+            tempLine = "%s: %s" % (input_strings[i], SPECIAL_KEY_NAMES[lowercase[i]])
         else:
-            f.write("%s: %s\n" %
-                    (input_strings[i].replace('"', ''), lowercase[i]))
+            tempLine = "%s: %s" % (input_strings[i], lowercase[i])
+        if uppercase[i] in SPECIAL_KEY_NAMES:
+            tempLine = tempLine + SPECIAL_KEY_NAMES[uppercase[i]]
+        else:
+            tempLine = tempLine + uppercase[i]
+        f.write(tempLine.replace('"', '') + "\n")
     f.write('`\nexport const keyLayout = "%s"' % key_layout)
 
 
