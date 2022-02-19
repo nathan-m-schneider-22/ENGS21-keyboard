@@ -1,57 +1,61 @@
-import PropTypes from 'prop-types';
-import { keyLayout } from '../constants/layout'
+import { keyLayout } from '../constants/layout';
+import React from "react";
 
-//line is one line from layout.js of the form "-UU--: E"
-const CharacterBlock = ({ line }) => {
-    if (line.length < 5) return;
+export default class CharacterBlock extends React.Component {
 
-    //grab the HTML for the arrows
-    let arrows = [];
-    for (let i = 0; i < 5; i++){
-        //only push if it's an actual key
-        if (keyLayout.charAt(i) === "1") {
-            arrows.push(getArrowImg(line.charAt(i)))
+    getArrowImg = (direction) => {
+        let img_path = "";
+        //could be done with the name of the file, but I typically don't like that approach
+        switch (direction) {
+            case 'U':
+                img_path="/u_direction.png";
+                break;
+            case 'D':
+                img_path="/d_direction.png";
+                break;
+            case "L":
+                img_path="/l_direction.png";
+                break;
+            case "R":
+                img_path="/r_direction.png";
+                break;
+            default:
+                img_path="/no_direction.png";
         }
-    }
-    
-    return (
-        <div className="characterBlock" key={line}>
-            <h1 className="centerText">{line.substring(line.indexOf(": ") + 2)[1]}</h1>
-            <div className="centerText">
-                {arrows}
+        return (
+            <div className="inline-block">
+                <img src={img_path} alt={direction + " arrow"}></img>
             </div>
-        </div>
-    )
-}
-
-CharacterBlock.propTypes = {
-    line: PropTypes.string.isRequired,
-}
-
-const getArrowImg = (direction) => {
-    let img_path = "";
-    //could be done with the name of the file, but I typically don't like that approach
-    switch (direction) {
-        case 'U':
-            img_path="/u_direction.png";
-            break;
-        case 'D':
-            img_path="/d_direction.png";
-            break;
-        case "L":
-            img_path="/l_direction.png";
-            break;
-        case "R":
-            img_path="/r_direction.png";
-            break;
-        default:
-            img_path="/no_direction.png";
+        )
     }
-    return (
-        <div className="inline-block">
-            <img src={img_path} alt={direction + " arrow"}></img>
-        </div>
-    )
-}
 
-export default CharacterBlock
+    getDisplayCharacter() {
+        let displayCharacter = this.props.line.substring(7, 8);
+        if (this.props.shiftActive){
+            displayCharacter = this.props.line.substring(8,9);
+        }
+        return displayCharacter;
+    }
+  
+    render() {
+        if (this.props.line.length < 5) return null;
+
+        //grab the HTML for the arrows
+        let arrows = [];
+        for (let i = 0; i < 5; i++){
+            //only push if it's an actual key
+            if (keyLayout.charAt(i) === "1") {
+                arrows.push(this.getArrowImg(this.props.line.charAt(i)))
+            }
+        }
+        //Put all the character blocks in a grid. spacing indicates space between grid elements
+        return (
+            <div className="characterBlock" key={this.props.line}>
+                <h1 className="centerText">{this.getDisplayCharacter()}</h1>
+                <div className="centerText">
+                    {arrows}
+                </div>
+            </div>
+        )
+    }
+  }
