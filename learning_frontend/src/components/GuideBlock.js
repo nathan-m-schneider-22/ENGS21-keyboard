@@ -23,7 +23,7 @@ export default class GuideBlock extends React.Component {
 
   render() {
     //create array with each element being a line from layout.js
-    let lines = keyMapping.trim().split("\n");
+    const lines = keyMapping.trim().split("\n");
 
     //grab HTML for the characterBlocks
     let characterBlocks = []

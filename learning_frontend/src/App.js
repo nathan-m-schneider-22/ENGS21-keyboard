@@ -1,5 +1,6 @@
 import React from "react";
 import GuideBlock from './components/GuideBlock';
+import {Link} from "react-router-dom";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -22,7 +23,11 @@ export default class App extends React.Component {
         <div style={{ textAlign: "center", marginTop: "2em" }}>
           <textarea style={{ fontSize: '36px' }} name="paragraph_text" cols="50" rows="10" onKeyDown={(e) => this.handleKeyDown(e)} onKeyUp={(e) => this.handleKeyUp(e)}></textarea>
         </div>
-        <p>{this.state.shiftActive + ""}</p>
+        <Link to="/LearningGame">
+          <button className="button-9">
+            Go to Learning Game!
+          </button>
+        </Link>
       </div>
     );
   }
