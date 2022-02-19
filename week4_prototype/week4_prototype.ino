@@ -2,6 +2,7 @@
 // Week 4 Prototype
 int fsrAnalogPin = 6; 
 int LEDpin = 11; 
+int CMD_pin = 12;
 
 
 // Constants for inputs
@@ -52,7 +53,7 @@ void loop()
   while(strcmp(directions, "-----") != 0) {
     read_keys(); // read the joystick inputs
     get_directions(); //convert input voltages into directions
-//    Serial.println(directions);
+    Serial.println(directions);
 
     new_dash = count_dash(directions);
 
@@ -65,20 +66,30 @@ void loop()
   }
 
   if (strcmp(letter, "none") != 0){
-    Serial.println(letter);
+    send_letter(letter);
+  }
+
+
+
+
+}
+
+void send_letter(char * letter) {
+  Serial.println(letter);
     String str_letter = String(letter);
     
     if (str_letter.length() > 1){
       int key_as_num = str_letter.toInt();
-      Keyboard.write(key_as_num);
+      Keyboard.press(key_as_num);
     }
     else{
       Keyboard.print(letter);
     }
+  Keyboard.releaseAll();
   delay(50); // if a real letter is typed, cool down before the next reading
-  }
-  
 }
+
+
 int count_dash(char* input){
   int sum = 0;
   for (int i = 0; i < NUM_KEYS; i++) {
@@ -121,17 +132,28 @@ void read_keys() // reads joysticks, currently only reads TEST_KEY
   xvals[2] = analogRead(A4);
   yvals[2] = analogRead(A5);
 
+  xvals[3] = analogRead(A6);
+  yvals[3] = analogRead(A7);
+
+  xvals[4] = analogRead(A8);
+  yvals[4] = analogRead(A9);
+
 //
 }
 void check_shifting() {
 
-  int force_val = analogRead(6);
+  int force_val = analogRead(A10);
 
-  if (force_val > shifting_threshold) isShifting = true;
+  if (force_val > shifting_threshold) {
+    isShifting = true;
+    Keyboard.press(KEY_LEFT_SHIFT);
+    
+  }
   else if (strcmp(directions, "-----") == 0) isShifting = false;
   
   if (isShifting) analogWrite(LEDpin, 255);
   else{
     analogWrite(LEDpin, 0);
+    Keyboard.release(KEY_LEFT_SHIFT);
   }
 }
