@@ -4,8 +4,8 @@ import sys
 from re import L
 NON_PRESS = "-"
 
-SPECIAL_KEY_NAMES = {'"178"': '"⌫"', '"176"':
-                     '"↩"', '" "': "⎵", '"131"': '"⌘"', '"128"': '"⌃"', '"130"': '"⌥"'}
+SPECIAL_KEY_NAMES = {'"178"': '"⌫"', '"176"': '"↩"', '"179"': '"⇥"',
+                     '" "': "⎵", '"131"': '"⌘"', '"128"': '"⌃"', '"130"': '"⌥"'}
 FRONT_END_LAYOUT_PATH = './learning_frontend/src/constants/layout.js'
 STICKY = ["130", "131", "128"]
 
