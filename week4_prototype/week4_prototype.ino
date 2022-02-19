@@ -2,7 +2,7 @@
 // Week 4 Prototype
 int fsrAnalogPin = 6; 
 int LEDpin = 11; 
-int CMD_pin = 12;
+int sticky_pin = 12;
 
 
 // Constants for inputs
@@ -46,6 +46,7 @@ void loop()
   read_keys(); // read the joystick inputs
   get_directions(); //convert input voltages into directions
   char* letter = map_letter(directions); // map directions to a letter through the generated layout
+  bool sticky;
 //  Serial.println(directions);
 
   int prev_dash = count_dash(directions);
@@ -56,17 +57,27 @@ void loop()
     Serial.println(directions);
 
     new_dash = count_dash(directions);
-
+  
     if (new_dash <= prev_dash){
       prev_dash = new_dash;
       letter = map_letter(directions);
+      sticky = is_sticky(directions);
 
     }
     delay(50);
   }
+  
 
+  
   if (strcmp(letter, "none") != 0){
     send_letter(letter);
+    Serial.println(sticky);
+    if (sticky) analogWrite(sticky_pin, 255);
+    else {
+      Keyboard.releaseAll();
+      analogWrite(sticky_pin, 0);
+    }
+
   }
 
 
@@ -85,7 +96,6 @@ void send_letter(char * letter) {
     else{
       Keyboard.print(letter);
     }
-  Keyboard.releaseAll();
   delay(50); // if a real letter is typed, cool down before the next reading
 }
 

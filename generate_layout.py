@@ -4,8 +4,10 @@ import sys
 from re import L
 NON_PRESS = "-"
 
-SPECIAL_KEY_NAMES = {'"178"': '"⌫"', '"176"': '"↩"', '" "': "⎵"}
+SPECIAL_KEY_NAMES = {'"178"': '"⌫"', '"176"':
+                     '"↩"', '" "': "⎵", '"131"': '"⌘"', '"128"': '"⌃"', '"130"': '"⌥"'}
 FRONT_END_LAYOUT_PATH = './learning_frontend/src/constants/layout.js'
+STICKY = ["130", "131", "128"]
 
 
 def get_letters(filename):  # Pull the desired outputs
@@ -77,22 +79,25 @@ def main(input_file, key_layout, finger_layout):
     print("char *inputs[] = {", ','.join(input_strings[0:len(letters)]), "};")
     lowercase = ['"' + l.split(',')[0] + '"' for l in letters]
     uppercase = ['"' + l.split(',')[1] + '"' for l in letters]
+    sticky = [str(int(l.split(',')[0] in STICKY)) for l in letters]
     print("char *lowercase[] = {", ','.join(lowercase), "};")
-    print("char *uppercase[] = {", ','.join(uppercase), "};")
+    print("int sticky[] = {", ','.join(sticky), "};")
     print("const int NUM_LETTERS = ", len(letters), ";")
 
     f = open(FRONT_END_LAYOUT_PATH, "w")
     f.write("export const keyMapping = \n`")
     for i in range(len(letters)):
-        tempLine =  ""
+        tempLine = ""
         if lowercase[i] in SPECIAL_KEY_NAMES:
-            tempLine = "%s: %s" % (input_strings[i], SPECIAL_KEY_NAMES[lowercase[i]])
+            tempLine = "%s: %s" % (
+                input_strings[i], SPECIAL_KEY_NAMES[lowercase[i]])
         else:
             tempLine = "%s: %s" % (input_strings[i], lowercase[i])
         if uppercase[i] in SPECIAL_KEY_NAMES:
             tempLine = tempLine + SPECIAL_KEY_NAMES[uppercase[i]]
         else:
             tempLine = tempLine + uppercase[i]
+
         f.write(tempLine.replace('"', '') + "\n")
     f.write('`\nexport const keyLayout = "%s"' % key_layout)
 
