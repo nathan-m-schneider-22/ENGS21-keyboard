@@ -50,7 +50,7 @@ export default class CharacterBlock extends React.Component {
         }
         //Put all the character blocks in a grid. spacing indicates space between grid elements
         return (
-            <div className="characterBlock" key={this.props.line}>
+            <div className="characterBlock" key={this.props.index}>
                 <h1 className="centerText">{this.getDisplayCharacter()}</h1>
                 <div className="centerText">
                     {arrows}
