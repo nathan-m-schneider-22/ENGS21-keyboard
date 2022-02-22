@@ -13,11 +13,11 @@ export default class GuideBlock extends React.Component {
   }
   
 
-  getCharacterBlock = (charLine) => {
+  getCharacterBlock = (charLine, i) => {
     //xs refers to how many grid locations an item takes up. 12 are allocated per row.
       return (
           <Grid item xs={this.state.xsValue}>
-              <CharacterBlock line={charLine} shiftActive={this.props.shiftActive}/>
+              <CharacterBlock line={charLine} index={i} shiftActive={this.props.shiftActive} targetLetter={this.props.targetLetter}/>
           </Grid>
       )
   }
@@ -38,13 +38,13 @@ export default class GuideBlock extends React.Component {
 
   render() {
     //create array with each element being a line from layout.js
-    let lines = keyMapping.trim().split("\n");
+    const lines = keyMapping.trim().split("\n");
 
     
     //grab HTML for the characterBlocks
     let characterBlocks = []
     for(let i = 0; i < lines.length; i++) {
-        characterBlocks.push(this.getCharacterBlock(lines[i]));
+        characterBlocks.push(this.getCharacterBlock(lines[i]), i);
     }
     let rows = []
     rows.push([null,null,"1","2","3","4","5","6","7","8","9","0","-","=","⌫",null].map(letter => this.findBlock(letter,lines)))
