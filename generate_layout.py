@@ -33,7 +33,7 @@ def valid_input(input, key_layout, finger_layout):
             if key_layout[i] != "1":
                 return False
 
-    ranges = [(0, 1), (0, 1, 2), (1, 2, 3), (2, 3), [4]]
+    ranges = [(0, 1), (0, 1, 2), (1, 2, 3), (2, 3, 4), [3, 4]]
     finger_layout = [f for f in finger_layout]
     for i in range(len(input)):
         if input[i] != NON_PRESS:
@@ -71,7 +71,10 @@ def main(input_file, key_layout, finger_layout):
 
         except:
             print("ERROR: Cannot calculate mapping for this configuration")
-            exit(1)
+            # exit(1)
+            input_strings = input_strings[:i]
+            letters = letters[:i]
+            break
 
     input_strings = ['"' + inp + '"' for inp in input_strings]
     # print in Arduino Form
