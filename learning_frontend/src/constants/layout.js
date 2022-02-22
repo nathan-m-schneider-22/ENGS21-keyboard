@@ -1,8 +1,8 @@
 export const keyMapping = 
-`U----: ⎵⎵
-D----: eE
-L----: tT
-R----: ⌫⌫
+`U----: eE
+D----: tT
+L----: ⌫⌫
+R----: ⎵⎵
 -U---: aA
 -D---: oO
 -L---: iI
