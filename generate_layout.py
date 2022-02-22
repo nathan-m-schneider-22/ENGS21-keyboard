@@ -83,7 +83,6 @@ def main(input_file, key_layout, finger_layout):
         if lowercase[i] == '""':
             lowercase[i] = '","'
 
-    print(lowercase)
     sticky = [str(int(l.split(',')[0] in STICKY)) for l in letters]
     print("char *lowercase[] = {", ','.join(lowercase), "};")
     print("int sticky[] = {", ','.join(sticky), "};")
@@ -97,7 +96,6 @@ def main(input_file, key_layout, finger_layout):
             tempLine = "%s: %s" % (
                 input_strings[i], SPECIAL_KEY_NAMES[lowercase[i]])
         else:
-            print(lowercase[i])
             tempLine = "%s: %s" % (input_strings[i], lowercase[i])
         if uppercase[i] in SPECIAL_KEY_NAMES:
             tempLine = tempLine + SPECIAL_KEY_NAMES[uppercase[i]]

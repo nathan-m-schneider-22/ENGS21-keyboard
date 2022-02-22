@@ -15,7 +15,7 @@ const int COOLDOWN = 100;
 const int TEST_KEY = 0;
 
 
-int shifting_threshold = 800;
+int shifting_threshold = 875;
 bool isShifting = false;
 
 
