@@ -11,6 +11,8 @@ ReactDOM.render(
     <Routes>
     <Route path="/" element={<App/>} />
     <Route path="/LearningGame" element={<LearningGame/>} />
+    <Route path="/LearningGame/:id" element={<LearningGame/>} />
+
   </Routes>
   </BrowserRouter>,
   rootElement

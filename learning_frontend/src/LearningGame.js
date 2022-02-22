@@ -2,7 +2,7 @@ import React from "react";
 import {Link } from "react-router-dom";
 import { keyMapping } from './constants/layout';
 import CharacterBlock from './components/CharacterBlock';
-
+import GuideBlock  from "./components/GuideBlock";
 function characterObj(character_1, shift_1, characterBlock_1, weight_1) {
   this.character = character_1;
   this.shift = shift_1;
@@ -19,7 +19,10 @@ export default class LearningGame extends React.Component {
     this.state = {
       targetIndex: -1,
       characterPool: [],
+      last_index: -1,
+      group:parseInt(window.location.href[window.location.href.length-1])
     };
+
   }
 
   componentDidMount() {
@@ -67,13 +70,19 @@ export default class LearningGame extends React.Component {
   populateCharacterPool() {
     const lines = keyMapping.trim().split("\n");
     for(let i = 0; i < lines.length; i++) {
-      const characterNonShift = lines[i].substring(7, 8);
+
+        if (this.state.group ==1 && i>=12) continue
+        if (this.state.group ==2 && (i<12 || i >= 24)) continue
+        if (this.state.group ==3 && (i<25 || i >= 36)) continue
+        if (this.state.group ==4 && i<36) continue
+
+        const characterNonShift = lines[i].substring(7, 8);
       if (characterNonShift !== "⇥") {
         this.addToCharacterPool(new characterObj(characterNonShift, false, this.getCharacterBlock(lines[i], false, i), this.getInitialWeight(i)));
         const characterShift = lines[i].substring(8,9);
-        if (characterShift !== characterNonShift) {
-          this.addToCharacterPool(new characterObj(characterShift, true, this.getCharacterBlock(lines[i], true, lines.length + i), this.getInitialWeight(i)));
-        }
+        // if (characterShift !== characterNonShift) {
+        //   this.addToCharacterPool(new characterObj(characterShift, true, this.getCharacterBlock(lines[i], true, lines.length + i), this.getInitialWeight(i)));
+        // }
       }
     }
   }
@@ -81,14 +90,24 @@ export default class LearningGame extends React.Component {
   weightedRandomSelection() {
     let i;
     let weights = [];
-    for (i = 0; i < this.state.characterPool.length; i++) {
-      weights[i] = this.state.characterPool[i].weight + (weights[i - 1] || 0);
+
+    let new_index = this.state.targetIndex;
+    while (new_index === this.state.targetIndex){
+        console.log(new_index)
+
+        for (i = 0; i < this.state.characterPool.length; i++) {
+          weights[i] = this.state.characterPool[i].weight + (weights[i - 1] || 0);
+        }
+        const randomVal = Math.random() * weights[weights.length - 1];
+        for (i = 0; i < weights.length; i++) {
+          if (weights[i] > randomVal) break;
+        }    
+        console.log(i)
+
+        new_index = i; 
     }
-    const randomVal = Math.random() * weights[weights.length - 1];
-    for (i = 0; i < weights.length; i++) {
-      if (weights[i] > randomVal) break;
-    }     
-    this.updateTargetIndex(i);
+    
+    this.updateTargetIndex(new_index);
   }
 
 
@@ -138,13 +157,17 @@ export default class LearningGame extends React.Component {
         </div>
       )
     }
+    const targetLetter = this.state.characterPool[this.state.targetIndex].character
     return (
-      <div className="LearningGame">
+      <div>
+            <h1>Welcome to the Learning Game!</h1>
+
+          <GuideBlock shiftActive={this.state.shiftActive} targetLetter={targetLetter}/>
+          <div className="LearningGame">
         <div style={{ textAlign: "center" }}>
-          <h1>Welcome to the Learning Game!</h1>
-          {this.state.characterPool[this.state.targetIndex].characterBlock}
-          {this.state.characterPool[this.state.targetIndex].shift ? 'Shift' : 'No shift'}
         </div>
+         {/* {this.state.characterPool[this.state.targetIndex].characterBlock}
+          {this.state.characterPool[this.state.targetIndex].shift ? 'Shift' : 'No shift'} */}
         <p>Current Weighting: {this.state.characterPool[this.state.targetIndex].weight}</p>
         <div style={{ textAlign: "center" }}>
           <input id="gameInputBox" type="text" onKeyUp={(e) => this.handleKeyUp(e)} onKeyPress={(e) => this.handleKeyPress(e)}/>
@@ -154,6 +177,8 @@ export default class LearningGame extends React.Component {
             Go to Layout Guide!
           </button>
         </Link>
+      </div>
+
       </div>
     );
   }

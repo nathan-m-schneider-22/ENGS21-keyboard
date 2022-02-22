@@ -19,7 +19,7 @@ export default class App extends React.Component {
     return (
       <div className="App">
         <h1 style={{ textAlign: "center" }}>Guide to Your Custom Layout</h1>
-        <GuideBlock shiftActive={this.state.shiftActive}/>
+        <GuideBlock shiftActive={this.state.shiftActive} targetLetter=""/>
         <div style={{ textAlign: "center", marginTop: "2em" }}>
           <textarea style={{ fontSize: '36px' }} name="paragraph_text" cols="50" rows="10" onKeyDown={(e) => this.handleKeyDown(e)} onKeyUp={(e) => this.handleKeyUp(e)}></textarea>
         </div>

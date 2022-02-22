@@ -48,9 +48,29 @@ export default class CharacterBlock extends React.Component {
                 arrows.push(this.getArrowImg(this.props.line.charAt(i)))
             }
         }
+        const targeted = this.getDisplayCharacter() === this.props.targetLetter
         //Put all the character blocks in a grid. spacing indicates space between grid elements
+        if (this.props.targetLetter === ""){
+            return (
+                <div className="characterBlock" key={this.props.index}>
+                <h1 className="centerText">{this.getDisplayCharacter()}</h1>
+                <div className="centerText">
+                    {arrows}
+                </div>
+            </div>
+            )
+        }
+        if (targeted){
+            return (
+            <div className="characterBlock" key={this.props.index} style={{ background: '#FFD700aa'}}>
+                <h1 className="centerText">{this.getDisplayCharacter()}</h1>
+                <div className="centerText">
+                    {arrows}
+                </div>
+            </div>)
+        }
         return (
-            <div className="characterBlock" key={this.props.index}>
+            <div className="characterBlock" key={this.props.index} style={{ background: 'grey'}}>
                 <h1 className="centerText">{this.getDisplayCharacter()}</h1>
                 <div className="centerText">
                     {arrows}

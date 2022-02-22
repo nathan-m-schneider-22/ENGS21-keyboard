@@ -17,7 +17,7 @@ export default class GuideBlock extends React.Component {
     //xs refers to how many grid locations an item takes up. 12 are allocated per row.
       return (
           <Grid item xs={this.state.xsValue}>
-              <CharacterBlock line={charLine} index={i} shiftActive={this.props.shiftActive}/>
+              <CharacterBlock line={charLine} index={i} shiftActive={this.props.shiftActive} targetLetter={this.props.targetLetter}/>
           </Grid>
       )
   }
