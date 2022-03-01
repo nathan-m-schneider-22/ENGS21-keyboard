@@ -112,7 +112,7 @@ if __name__ == "__main__":
         print(
             "python generate_layout.py <INPUT_FILE> <KEY OPTIONS> <FINGER OPTIONS>")
         print(
-            "ex: python generate_layout.py ranked_inputs.txt 11001 01001"
+            "ex: python3 generate_layout.py ranked_inputs.txt 11001 11001"
         )
         exit(1)
     main(sys.argv[1], sys.argv[2], sys.argv[3])
