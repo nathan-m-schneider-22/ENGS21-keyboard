@@ -8,9 +8,11 @@ int sticky_pin = 12;
 // Constants for inputs
 const int NUM_KEYS = 5;
 const int D = 512;
-const int MINVAL = 250;
-const int MAXVAL = 770;
-const int THRESHOLD =90;
+//const int MINVAL = 250;
+//const int MAXVAL = 770;
+//const int THRESHOLD =90;
+const int HIGH_THRESHOLD = D + 400;
+const int LOW_THRESHOLD = D - 400;
 const int COOLDOWN = 100;
 const int TEST_KEY = 0;
 
@@ -110,23 +112,62 @@ int count_dash(char* input){
 
 void get_directions()
 {
+//  for (int i = 0; i < NUM_KEYS; i++)
+//  { // Map the inputs from -100 to 100
+//    int mapped_x = map(xvals[i], MINVAL, MAXVAL, 100, -100);
+//    int mapped_y = map(yvals[i], MINVAL, MAXVAL, 100, -100);
+//    if (mapped_x < -THRESHOLD && abs(abs(mapped_x) - D) >= abs(abs(mapped_y) - D)){ // if surpasses a threshold, assign a direction
+//      directions[i] = 'L';
+//      Serial.print("X: ");
+//      Serial.println(mapped_x);
+//      Serial.print("Y: ");
+//      Serial.println(mapped_y);
+//    }
+//    else if (mapped_x > THRESHOLD && abs(abs(mapped_x) - D) >= abs(abs(mapped_y) - D))
+//      directions[i] = 'R';
+//    else if (mapped_y > THRESHOLD && abs(abs(mapped_x) - D) < abs(abs(mapped_y) - D))
+//      directions[i] = 'U';
+//    else if (mapped_y < -THRESHOLD && abs(abs(mapped_x) - D) < abs(abs(mapped_y) - D))
+//      directions[i] = 'D';
+//    else
+//      directions[i] = '-';
+//  }
+//  directions[NUM_KEYS] = '\0';
+
   for (int i = 0; i < NUM_KEYS; i++)
-  { // Map the inputs from -100 to 100
-    int mapped_x = map(xvals[i], MINVAL, MAXVAL, 100, -100);
-    int mapped_y = map(yvals[i], MINVAL, MAXVAL, 100, -100);
-    
-    if (mapped_x < -THRESHOLD) // if surpasses a threshold, assign a direction
-      directions[i] = 'L';
-    else if (mapped_x > THRESHOLD)
-      directions[i] = 'R';
-    else if (mapped_y > THRESHOLD)
-      directions[i] = 'U';
-    else if (mapped_y < -THRESHOLD)
-      directions[i] = 'D';
-    else
-      directions[i] = '-';
-  }
-  directions[NUM_KEYS] = '\0';
+    {
+      if (xvals[i] > HIGH_THRESHOLD && abs(xvals[i] - D) >= abs(yvals[i] - D)){ // if surpasses a threshold, assign a direction
+        directions[i] = 'L';
+//        Serial.print("X: ");
+//        Serial.println(xvals[i]);
+//        Serial.print("Y: ");
+//        Serial.println(yvals[i]);
+      }
+      else if (xvals[i] < LOW_THRESHOLD && abs(xvals[i] - D) >= abs(yvals[i] - D)){
+        directions[i] = 'R';
+//        Serial.print("X: ");
+//        Serial.println(xvals[i]);
+//        Serial.print("Y: ");
+//        Serial.println(yvals[i]);
+      }
+      else if (yvals[i] > HIGH_THRESHOLD && abs(xvals[i] - D) < abs(yvals[i] - D)){
+        directions[i] = 'D';
+//        Serial.print("X: ");
+//        Serial.println(xvals[i]);
+//        Serial.print("Y: ");
+//        Serial.println(yvals[i]);
+      }
+      else if (yvals[i] < LOW_THRESHOLD && abs(xvals[i] - D) < abs(yvals[i] - D)){
+        directions[i] = 'U';
+//        Serial.print("X: ");
+//        Serial.println(xvals[i]);
+//        Serial.print("Y: ");
+//        Serial.println(yvals[i]);
+      }
+      else
+        directions[i] = '-';
+    }
+    directions[NUM_KEYS] = '\0';
 }
 
 void read_keys() // reads joysticks, currently only reads TEST_KEY

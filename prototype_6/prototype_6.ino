@@ -1,5 +1,5 @@
 // Nathan Schneider
-// Week 4 Prototype
+// Prototype 6
 int fsrAnalogPin = 6; 
 int LEDpin = 11; 
 int sticky_pin = 12;
@@ -7,17 +7,25 @@ int sticky_pin = 12;
 
 // Constants for inputs
 const int NUM_KEYS = 5;
+const int D = 512;
+//const int MINVAL = 250;
+//const int MAXVAL = 770;
+//const int THRESHOLD =90;
+const int HIGH_THRESHOLD = D + 400;
+const int LOW_THRESHOLD = D - 400;
 const int COOLDOWN = 100;
 const int TEST_KEY = 0;
+
 
 int shifting_threshold = 875;
 bool isShifting = false;
 
 
 // Initialize joystick readings to the middle range
-int keysExpressed[NUM_KEYS] = {0,0,0,0,0};
+int xvals[NUM_KEYS] = {D, D, D, D, D};
+int yvals[NUM_KEYS] = {D, D, D, D, D};
 
-// Stick directions, expressed by 3 characters (U,D,L,R)
+// Stick directions, expressed by 5 characters (U,D,L,R)
 char directions[NUM_KEYS] = "-----";
 
 // keyboard not working on Arduino Uno
@@ -27,18 +35,12 @@ void setup()
 {
   Serial.begin(9600);
   pinMode(LEDpin, OUTPUT);
-  pinMode(2, INPUT);
-  pinMode(3, INPUT);
-  pinMode(4, INPUT);
-  pinMode(5, INPUT);
-  pinMode(6, INPUT);
-  pinMode(7, INPUT);
-  pinMode(8, INPUT);
-  pinMode(9, INPUT);
-//  pinMode(A0, INPUT);
-//  pinMode(A1, INPUT);
-//  pinMode(A2, INPUT);
-//  pinMode(A3, INPUT);
+  pinMode(sticky_pin, OUTPUT);
+
+  pinMode(A0, INPUT);
+  pinMode(A1, INPUT);
+  pinMode(A2, INPUT);
+  pinMode(A3, INPUT);
 
 // keyboard not working on Arduino Uno
   Keyboard.begin();
@@ -47,9 +49,8 @@ void setup()
 
 void loop()
 {
-
-
   read_keys(); // read the joystick inputs
+  get_directions(); //convert input voltages into directions
   char* letter = map_letter(directions); // map directions to a letter through the generated layout
   bool sticky;
 //  Serial.println(directions);
@@ -58,6 +59,7 @@ void loop()
   int new_dash = prev_dash;
   while(strcmp(directions, "-----") != 0) {
     read_keys(); // read the joystick inputs
+    get_directions(); //convert input voltages into directions
     Serial.println(directions);
 
     new_dash = count_dash(directions);
@@ -112,45 +114,75 @@ int count_dash(char* input){
   return sum;
 }
 
-void read_keys() // reads joysticks, currently only reads TEST_KEY
+void get_directions()
 {
-  
-  check_shifting();
-  
-  if (digitalRead(2) == 1)
-    directions[0] = 'U';
-  else if (digitalRead(3) == 1)
-    directions[0] = 'D';
-  else if(digitalRead(4) == 1)
+  if (digitalRead(A0) == 1)
     directions[0] = 'L';
-  else if(digitalRead(5) == 1)
+  else if (digitalRead(A1) == 1)
+    directions[0] = 'U';
+  else if(digitalRead(A2) == 1)
     directions[0] = 'R';
+  else if(digitalRead(A3) == 1)
+    directions[0] = 'D';
   else
     directions[0] = '-';
-
-  if (digitalRead(6) == 1)
-    directions[1] = 'U';
-  else if (digitalRead(7) == 1)
-    directions[1] = 'D';
-  else if(digitalRead(8) == 1)
-    directions[1] = 'L';
-  else if(digitalRead(9) == 1)
-    directions[1] = 'R';
-  else
-    directions[1] = '-';
-
-//  if (digitalRead(A0) == 1)
-//    directions[2] = 'U';
-//  else if (digitalRead(A1) == 1)
-//    directions[2] = 'D';
-//  else if(digitalRead(A2) == 1)
-//    directions[2] = 'L';
-//  else if(digitalRead(A3) == 1)
-//    directions[2] = 'R';
-//  else
-//    directions[2] = '-';
     
+  for (int i = 1; i < NUM_KEYS; i++)
+  { // Map the inputs from -100 to 100
+//    int mapped_x = map(xvals[i], MINVAL, MAXVAL, 100, -100);
+//    int mapped_y = map(yvals[i], MINVAL, MAXVAL, 100, -100);
+//    
+//    if (mapped_x < -THRESHOLD) // if surpasses a threshold, assign a direction
+//      directions[i] = 'L';
+//    else if (mapped_x > THRESHOLD)
+//      directions[i] = 'R';
+//    else if (mapped_y > THRESHOLD)
+//      directions[i] = 'U';
+//    else if (mapped_y < -THRESHOLD)
+//      directions[i] = 'D';
+//    else
+//      directions[i] = '-';
+//  }
+    if (xvals[i] > HIGH_THRESHOLD && abs(xvals[i] - D) >= abs(yvals[i] - D)){ // if surpasses a threshold, assign a direction
+            directions[i] = 'L';
+          }
+          else if (xvals[i] < LOW_THRESHOLD && abs(xvals[i] - D) >= abs(yvals[i] - D)){
+            directions[i] = 'R';
+          }
+          else if (yvals[i] > HIGH_THRESHOLD && abs(xvals[i] - D) < abs(yvals[i] - D)){
+            directions[i] = 'D';
+          }
+          else if (yvals[i] < LOW_THRESHOLD && abs(xvals[i] - D) < abs(yvals[i] - D)){
+            directions[i] = 'U';
+          }
+          else
+            directions[i] = '-';
   directions[NUM_KEYS] = '\0';
+  }
+}
+
+void read_keys() // reads joysticks, currently only reads TEST_KEY
+{
+
+  check_shifting();
+
+  xvals[1] = analogRead(A4);
+  yvals[1] = analogRead(A5);
+  
+  xvals[2] = analogRead(A8);
+  yvals[2] = analogRead(A9);
+
+//  xvals[3] = analogRead(A6);
+//  yvals[3] = analogRead(A7);
+//
+//  xvals[4] = analogRead(A8);
+//  yvals[4] = analogRead(A9);
+
+  xvals[3] = D;
+  yvals[3] = D;
+
+  xvals[4] = D;
+  yvals[4] = D;
 
 //
 }
